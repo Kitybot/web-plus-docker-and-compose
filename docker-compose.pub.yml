@@ -2,17 +2,13 @@ version: '3'
 
 services:
   backend:
-    container_name: backend-dev
+    container_name: backend
     build: 
       context: backend
-      dockerfile: Dockerfile.dev
-    image: backend-dev
+      dockerfile: Dockerfile.pub
+    image: backend
     restart: always
     env_file: .env
-    volumes:
-      - type: bind
-        source: ./backend/src
-        target: /app/src
     ports:
       - '4000:3000'
     depends_on:
@@ -21,21 +17,15 @@ services:
       - backend
 
   frontend:
-    container_name: frontend-dev
+    container_name: frontend
     build: 
       context: frontend
-      dockerfile: Dockerfile.dev
-    image: frontend-dev
+      dockerfile: Dockerfile.pub
+    image: frontend
     env_file: .env
     restart: always
-    environment:
-      CHOKIDAR_USEPOLLING: "true"
-    volumes:
-      - type: bind
-        source: ./frontend/src
-        target: /app/src
     ports:
-      - '8080:3000'
+      - '8080:80'
     networks:
       - frontend
       
