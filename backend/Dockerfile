@@ -1,15 +1,16 @@
-FROM node:16-alpine AS kpd_backend_builder
-WORKDIR /app
-COPY packag*.json ./
+FROM node:16-alpine AS builder
+WORKDIR /app 
+COPY package*.json ./
 RUN npm ci
-COPY . ./
+COPY ./ ./
 RUN npm run build
 
-FROM node:16-alpine AS kpd_backend
+FROM node:16-alpine AS production
 WORKDIR /app
-COPY --from=kpd_backend_builder /app/package*.json ./
-RUN npm ci --omit=dev && npm install -g pm2
-COPY --from=kpd_backend_builder /app/dist ./dist
-COPY ./ecosystem.config.js ./
-EXPOSE 3001
-CMD pm2-runtime start ecosystem.config.js
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY ecosystem.config.js ./
+COPY --from=builder /app/dist/ /app/dist/
+RUN npm install pm2 -g
+EXPOSE 3000
+CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]

@@ -1,4 +1,4 @@
-export const URL = "https://api.kpd.kirbob.nomoredomains.monster";
+export const URL = "https://api.bvbsis.nomoredomains.monster";
 
 export const MINIMUM_PASSWORD_LENGTH = 3;
 export const MINIMUM_USERNAME_LENGTH = 3;

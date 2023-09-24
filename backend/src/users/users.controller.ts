@@ -1,91 +1,55 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Request,
-  UseFilters,
-} from '@nestjs/common';
+import { Controller, UseGuards, Req, Patch, Param } from '@nestjs/common';
+import { Body, Get, Post } from '@nestjs/common/decorators';
+import { JwtGuard } from 'src/auth/auth.guard';
+import { WishesService } from 'src/wishes/wishes.service';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { FindManyDto } from './dto/find-many.dto';
-import { Request as RequestExpress } from 'express';
-import { UserHelper } from './helpers/user.helper';
-import {
-  InvalidData,
-  UserOrMailExistsExceptionFilter,
-} from '../filters/user-exists.filter';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly userHelper: UserHelper,
+    private readonly wishesService: WishesService,
   ) {}
 
-  @UseFilters(UserOrMailExistsExceptionFilter)
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
+  @UseGuards(JwtGuard)
   @Get('me')
-  async findMe(@Request() request: RequestExpress) {
-    const userId = this.userHelper.getUserIdOutRequest(request);
-    const { password, ...userWithoutPassword } =
-      await this.usersService.findOne({
-        id: userId,
-      });
-    return userWithoutPassword;
+  async getMe(@Req() req) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...rest } = await this.usersService.findOne(
+      'id',
+      req.user.id,
+    );
+    return rest;
   }
 
-  @UseFilters(InvalidData, UserOrMailExistsExceptionFilter)
+  @UseGuards(JwtGuard)
   @Patch('me')
-  update(
-    @Body() updateUserDto: UpdateUserDto,
-    @Request() request: RequestExpress,
-  ) {
-    const userId = this.userHelper.getUserIdOutRequest(request);
-    return this.usersService.updateMe(userId, updateUserDto);
+  update(@Req() req, @Body() body) {
+    return this.usersService.updateOne(req.user, body);
   }
 
+  @UseGuards(JwtGuard)
   @Get('me/wishes')
-  async findMyWishes(@Request() request: RequestExpress) {
-    const userId = this.userHelper.getUserIdOutRequest(request);
-    const { wishes } = await this.usersService.findMyWishes(userId);
-    return wishes;
+  async getMeWishes(@Req() req) {
+    const users = await this.usersService.findUsersWithWishes(req.user.id);
+    const wishes = users.map((user) => user.wishes);
+    return wishes[0];
   }
 
-  @Get(':username/wishes')
-  async findAnotherUserWishes(@Param('username') username: string) {
-    const { wishes } = await this.usersService.findAnotherUserWishes(username);
-    return wishes;
-  }
-
+  @UseGuards(JwtGuard)
   @Get(':username')
-  async findOne(@Param('username') username: string) {
-    const { email, password, ...userData } = await this.usersService.findOne({
-      username,
-    });
-    return userData;
+  getUser(@Param('username') username) {
+    return this.usersService.findOne('username', username);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get(':username/wishes')
+  getUsersWishes(@Param('username') username) {
+    return this.wishesService.findMany('owner', { username });
   }
 
   @Post('find')
-  findMany(@Body() findManyDto: FindManyDto) {
-    return this.usersService.findMany(findManyDto.query);
-  }
-
-  @Delete(':username')
-  remove(@Param('username') username: string) {
-    return this.usersService.remove({ username });
+  findUsers(@Body('query') query: string) {
+    return this.usersService.findMany(query);
   }
 }

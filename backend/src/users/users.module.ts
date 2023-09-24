@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { User } from './entities/user.entity';
-import { UserHelper } from './helpers/user.helper';
-import { UserHash } from './helpers/hash.helper';
-import { ConfigModule } from '@nestjs/config';
+import { User } from './entities/users.entity';
+import { UsersService } from './users.service';
+import { WishesModule } from 'src/wishes/wishes.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), ConfigModule],
+  imports: [TypeOrmModule.forFeature([User]), WishesModule],
   controllers: [UsersController],
-  providers: [UsersService, UserHelper, UserHash],
-  exports: [UsersService, UserHash, UserHelper],
+  providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}
