@@ -7,8 +7,9 @@
 Проект представляет собой простое веб-приложение, состоящее из трех сервисов: backend, postgres и frontend. Сервис backend представляет собой серверную часть приложения, написанную на TypeScript с использованием фреймворка Nest. Сервис postgres представляет собой базу данных, используемую для хранения данных серверной части приложения. Сервис frontend представляет собой клиентскую часть приложения, написанную с использованием фреймворка React.
 
 В проекте используются технологии Docker и Docker-compose для докеризации приложения и упрощения процесса его развёртывания на удалённом сервере. В файле docker-compose.yml определена конфигурация контейнеров для каждого сервиса. Также в проекте используется инструмент PM2 для управления процессами на сервере.
-
+### Ip адрес машины 
+158.160.39.10
 ### Frontend
-https://bvbsis.nomoredomains.monster
+https://kpd.kirbob.nomoredomains.nomoredomainsrocks.ru
 ### Backend
-https://api.bvbsis.nomoredomains.monster
+https://api.kpd.kirbob.nomoredoma.nomoredomainsrocks.ru
