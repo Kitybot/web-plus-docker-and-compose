@@ -35,7 +35,7 @@ import { changeWishlists21682268049343 } from './database/migrations/16822680493
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('database.host'),
-        port: configService.get('database.post'),
+        port: configService.get('database.port'),
         username: configService.get('database.usename'),
         password: configService.get('database.password'),
         database: configService.get('database.name'),

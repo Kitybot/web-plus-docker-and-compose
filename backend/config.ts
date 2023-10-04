@@ -7,7 +7,7 @@ export default () => ({
       password: process.env.POSTGRES_PASSWORD || 'student',
     },
     appServer: {
-      port: parseInt(process.env.APP_SERVER_PORT, 10) || 3001,
+      port: parseInt(process.env.APP_SERVER_PORT, 10) || 3000,
       host: process.env.APP_SERVER_HOSTNAME || 'localhost',
     },
     jwt: {
