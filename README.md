@@ -8,8 +8,8 @@
 
 В проекте используются технологии Docker и Docker-compose для докеризации приложения и упрощения процесса его развёртывания на удалённом сервере. В файле docker-compose.yml определена конфигурация контейнеров для каждого сервиса. Также в проекте используется инструмент PM2 для управления процессами на сервере.
 ### Ip адрес машины 
-158.160.39.10
+158.160.123.36
 ### Frontend
-https://kpd.kirbob.nomoredomains.nomoredomainsrocks.ru
+https://kpd.kirbob.nomoredomainsrocks.ru
 ### Backend
-https://api.kpd.kirbob.nomoredoma.nomoredomainsrocks.ru
+https://api.kpd.kirbob.nomoredomainsrocks.ru
